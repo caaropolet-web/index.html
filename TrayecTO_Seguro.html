@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrayecTO Seguro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#2d6a4f;--verde2:#40916c;--verde3:#52b788;--verde-s:#d8f3dc;
+  --azul:#1d6fa4;--azul-s:#e3f2fd;
+  --rojo:#c1121f;--rojo-s:#ffebee;
+  --amarillo:#e07b2a;--amarillo-s:#fff3e0;
+  --morado:#6d4c9e;--morado-s:#f0eafb;
+  --rosa:#b5446e;--rosa-s:#fce4ec;
+  --cafe:#7c5b3e;--cafe-s:#f5efe8;
+  --gris:#f4f6f4;--borde:#e0e0e0;--blanco:#fff;
+  --txt:#1a1a2e;--txt2:#4a4a4a;--txt3:#888;
+  --shadow:0 2px 14px rgba(0,0,0,0.09);
+  --r:14px;--r2:10px;--r3:8px;
+  --fs:16px;--fsm:14px;--fss:12px;--fsh:22px;
+  --sp:1.0;
+}
+.grande{--fs:20px;--fsm:18px;--fss:15px;--fsh:26px;--sp:1.3}
+
+body{font-family:'Inter',sans-serif;background:#ecf0ec;color:var(--txt);min-height:100vh;max-width:430px;margin:0 auto;font-size:var(--fs);line-height:var(--sp)}
+
+/* ── HEADER ── */
+.hd{background:var(--verde);color:#fff;padding:16px 16px 18px;position:sticky;top:0;z-index:100}
+.hd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-i{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px}
+.logo-t{font-family:'Fraunces',serif;font-size:19px}
+.hd-btns{display:flex;gap:7px;align-items:center}
+.btn-grande-on{background:#fff3;color:#fff;border:1.5px solid #fff5;padding:6px 10px;border-radius:20px;font-size:var(--fss);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.btn-grande-on.on{background:#fff;color:var(--verde)}
+.btn-sos{background:#e63946;color:#fff;border:none;padding:7px 13px;border-radius:20px;font-size:var(--fss);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.8}}
+.busca{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:9px;display:flex;align-items:center;gap:9px;padding:9px 13px}
+.busca input{background:transparent;border:none;outline:none;color:#fff;font-size:var(--fsm);flex:1;font-family:'Inter',sans-serif}
+.busca input::placeholder{color:rgba(255,255,255,.6)}
+
+/* ── TABS ── */
+.tabs{background:#fff;display:flex;border-bottom:1.5px solid var(--borde);overflow-x:auto;scrollbar-width:none;position:sticky;top:104px;z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:11px 14px;font-size:var(--fss);font-weight:500;color:var(--txt2);cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:all .2s}
+.tab.on{color:var(--verde);border-bottom-color:var(--verde);font-weight:600}
+.tab:hover{background:var(--gris)}
+
+/* ── CONTENIDO ── */
+.sec{padding:14px 14px 80px}
+.sec{display:none}.sec.on{display:block}
+
+/* ── CARD BASE ── */
+.card{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);overflow:hidden;margin-bottom:12px}
+.card-p{padding:14px 16px}
+
+/* ── PERFIL ── */
+.perfil-hero{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.avatar-big{width:64px;height:64px;border-radius:50%;background:var(--verde-s);color:var(--verde);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.avatar-edit{position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--verde);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.perfil-nombre{font-size:var(--fsh);font-weight:700;font-family:'Fraunces',serif}
+.perfil-edad{font-size:var(--fsm);color:var(--txt2);margin-top:2px}
+.campo-grupo{margin-bottom:12px}
+.campo-label{font-size:var(--fss);font-weight:600;color:var(--txt2);margin-bottom:5px;display:block}
+.campo-input{width:100%;padding:10px 13px;border:1.5px solid var(--borde);border-radius:var(--r3);font-size:var(--fsm);font-family:'Inter',sans-serif;color:var(--txt);outline:none;background:#fafafa;transition:border-color .2s}
+.campo-input:focus{border-color:var(--verde);background:#fff}
+.btn-guardar{width:100%;padding:12px;background:var(--verde);color:#fff;border:none;border-radius:var(--r2);font-size:var(--fsm);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.btn-guardar:hover{background:var(--verde2)}
+
+/* ── ESTOY BIEN ── */
+.estoy-bien-btn{width:100%;padding:20px;background:var(--verde-s);border:2.5px solid var(--verde3);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transition:all .2s;margin-bottom:12px}
+.estoy-bien-btn:hover{background:var(--verde3);color:#fff}
+.estoy-bien-btn:hover .eb-ico{filter:grayscale(1) brightness(2)}
+.eb-ico{font-size:36px}
+.eb-txt{font-size:var(--fs);font-weight:700;color:var(--verde)}
+.eb-sub{font-size:var(--fss);color:var(--txt2)}
+.enviado{background:var(--verde)!important;border-color:var(--verde)!important;color:#fff}
+.enviado .eb-txt,.enviado .eb-sub{color:#fff!important}
+
+/* ── RECORDATORIOS ── */
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rec-card{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:14px;text-align:center;cursor:pointer;transition:all .2s}
+.rec-card:hover{border-color:var(--verde);transform:translateY(-2px)}
+.rec-card.activo{border-color:var(--verde3);background:var(--verde-s)}
+.rec-ico{font-size:28px;margin-bottom:6px}
+.rec-nombre{font-size:var(--fsm);font-weight:600;margin-bottom:3px}
+.rec-hora{font-size:var(--fss);color:var(--txt2)}
+.rec-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.toggle{width:44px;height:24px;background:var(--borde);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--verde)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle.on::after{transform:translateX(20px)}
+
+/* ── CAMINATAS ── */
+.pasos-hero{text-align:center;padding:20px 0 16px}
+.pasos-num{font-size:52px;font-weight:700;font-family:'Fraunces',serif;color:var(--verde);line-height:1}
+.pasos-label{font-size:var(--fsm);color:var(--txt2);margin-top:4px}
+.barra-progreso{height:10px;background:var(--borde);border-radius:5px;overflow:hidden;margin:12px 0}
+.barra-fill{height:100%;background:var(--verde3);border-radius:5px;transition:width .5s ease}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-mini{background:#fff;border-radius:var(--r2);border:1.5px solid var(--borde);padding:11px 8px;text-align:center}
+.stat-mini-val{font-size:var(--fs);font-weight:700;color:var(--verde)}
+.stat-mini-lab{font-size:10px;color:var(--txt3);margin-top:2px}
+.historial-lista{display:flex;flex-direction:column;gap:8px}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;border-radius:var(--r2);border:1.5px solid var(--borde)}
+.hist-fecha{font-size:var(--fsm);font-weight:500}
+.hist-det{font-size:var(--fss);color:var(--txt3)}
+.hist-pasos{font-size:var(--fsm);font-weight:600;color:var(--verde)}
+
+/* ── ALERTAS CERCANÍA ── */
+.alerta-seg{background:var(--amarillo-s);border-left:3.5px solid var(--amarillo);border-radius:0 var(--r2) var(--r2) 0;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.alerta-seg i{font-size:18px;color:var(--amarillo);flex-shrink:0;margin-top:1px}
+.alerta-seg-txt{font-size:var(--fsm);color:var(--txt2);line-height:1.5}
+.alerta-seg-txt strong{color:var(--txt);display:block;margin-bottom:2px;font-size:var(--fsm)}
+.alertas-lista{display:flex;flex-direction:column;gap:8px}
+.alerta-item{background:#fff;border-radius:var(--r2);border:1.5px solid var(--borde);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.alerta-punto-ico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.alerta-info{flex:1}
+.alerta-nombre{font-size:var(--fsm);font-weight:600;margin-bottom:2px}
+.alerta-radio{font-size:var(--fss);color:var(--txt3)}
+.badge-on{background:var(--verde-s);color:var(--verde);font-size:10px;font-weight:600;padding:3px 8px;border-radius:10px}
+.badge-off{background:var(--gris);color:var(--txt3);font-size:10px;padding:3px 8px;border-radius:10px}
+
+/* ── CALIFICAR RUTAS ── */
+.ruta-cal{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:14px 16px;margin-bottom:12px}
+.ruta-cal-nombre{font-size:var(--fsm);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.cal-fila{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-label{font-size:var(--fss);color:var(--txt2);display:flex;align-items:center;gap:6px}
+.estrellas{display:flex;gap:4px}
+.estrella{font-size:22px;cursor:pointer;transition:transform .1s;opacity:.3}
+.estrella.on{opacity:1}
+.estrella:hover{transform:scale(1.2)}
+.btn-enviar-cal{width:100%;padding:11px;background:var(--verde-s);color:var(--verde);border:1.5px solid var(--verde3);border-radius:var(--r2);font-size:var(--fsm);font-weight:600;cursor:pointer;margin-top:4px}
+.btn-enviar-cal:hover{background:var(--verde);color:#fff}
+.cal-promedio{display:flex;align-items:center;gap:6px;font-size:var(--fss);color:var(--txt3);margin-top:6px}
+
+/* ── VOZ ── */
+.voz-btn{width:100%;padding:22px;background:var(--morado-s);border:2.5px solid var(--morado);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;margin-bottom:12px;transition:all .2s}
+.voz-btn.escuchando{background:var(--morado);animation:pulsev .8s infinite}
+@keyframes pulsev{0%,100%{box-shadow:0 0 0 0 rgba(109,76,158,.4)}50%{box-shadow:0 0 0 12px rgba(109,76,158,0)}}
+.voz-ico{font-size:38px}
+.voz-txt{font-size:var(--fs);font-weight:700;color:var(--morado)}
+.voz-btn.escuchando .voz-txt{color:#fff}
+.voz-cmds{display:flex;flex-direction:column;gap:7px}
+.voz-cmd{background:#fff;border-radius:var(--r2);border:1.5px solid var(--borde);padding:10px 14px;font-size:var(--fsm);color:var(--txt2);display:flex;align-items:center;gap:10px}
+.voz-cmd i{color:var(--morado);font-size:16px;flex-shrink:0}
+
+/* ── LLAMADAS RÁPIDAS ── */
+.llamadas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.llamada-btn{padding:16px 10px;border-radius:var(--r);border:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .18s;font-family:'Inter',sans-serif}
+.llamada-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.llamada-btn i{font-size:28px}
+.llamada-num{font-size:var(--fs);font-weight:700}
+.llamada-desc{font-size:var(--fss);font-weight:500;opacity:.8}
+.ll-fam{background:var(--verde-s);color:var(--verde);border-color:var(--verde3)}
+.ll-samu{background:#fff3e0;color:#b84c00;border-color:#f4a261}
+.ll-bom{background:#fff3e0;color:#c0392b;border-color:#e74c3c}
+.ll-car{background:#e8f0fd;color:#1a56a0;border-color:#5588e0}
+.ll-fam-extra{background:var(--rosa-s);color:var(--rosa);border-color:var(--rosa)}
+
+/* ── INICIO ── */
+.inicio-perfil-strip{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:13px 15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.strip-izq{display:flex;align-items:center;gap:12px}
+.strip-av{width:44px;height:44px;border-radius:50%;background:var(--verde-s);color:var(--verde);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.strip-nombre{font-size:var(--fsm);font-weight:600}
+.strip-sub{font-size:var(--fss);color:var(--txt3)}
+.strip-der{display:flex;gap:7px}
+.btn-mini{padding:7px 11px;border-radius:20px;border:none;font-size:var(--fss);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.btn-mini-v{background:var(--verde-s);color:var(--verde)}
+.btn-mini-r{background:var(--rojo-s);color:var(--rojo)}
+
+.banner{background:var(--verde);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.banner-ico{width:48px;height:48px;background:rgba(255,255,255,.18);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.banner h2{font-size:var(--fsm);font-weight:600;margin-bottom:3px}
+.banner p{font-size:var(--fss);opacity:.85;line-height:1.4}
+.btn-calc{background:#fff;color:var(--verde);border:none;padding:7px 14px;border-radius:20px;font-size:var(--fss);font-weight:600;cursor:pointer;margin-top:8px;display:inline-flex;align-items:center;gap:5px}
+
+.filtros{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.filtro{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:20px;border:1.5px solid var(--borde);font-size:var(--fss);font-weight:500;cursor:pointer;background:#fff;transition:all .2s;color:var(--txt2)}
+.filtro.on{border-color:currentColor}
+.fd.on{background:var(--verde-s);color:var(--verde)}
+.fb.on{background:var(--azul-s);color:var(--azul)}
+.fc.on{background:var(--amarillo-s);color:var(--amarillo)}
+.ff.on{background:var(--rojo-s);color:var(--rojo)}
+.fp.on{background:var(--morado-s);color:var(--morado)}
+.fv.on{background:var(--rosa-s);color:var(--rosa)}
+
+.sec-tit{font-size:var(--fsm);font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.badge-c{background:var(--verde-s);color:var(--verde);font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px}
+
+.lugar-card{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;margin-bottom:9px}
+.lugar-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.lugar-card.exp{border-color:var(--verde3)}
+.lugar-hd{padding:13px 15px;display:flex;align-items:center;gap:11px}
+.cat-ico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ci-d{background:var(--verde-s)}.ci-b{background:var(--azul-s)}.ci-c{background:var(--amarillo-s)}.ci-f{background:var(--rojo-s)}.ci-p{background:var(--morado-s)}.ci-v{background:var(--rosa-s)}
+.lugar-info{flex:1;min-width:0}
+.lugar-nombre{font-size:var(--fsm);font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lugar-dir{font-size:var(--fss);color:var(--txt3);display:flex;align-items:center;gap:4px}
+.lugar-meta{display:flex;align-items:center;gap:6px;margin-top:4px}
+.dist-b{font-size:11px;font-weight:500;padding:2px 7px;border-radius:10px;background:var(--gris);color:var(--txt2);display:flex;align-items:center;gap:3px}
+.ab{background:#e8f5e9;color:var(--verde)}.ce{background:#ffebee;color:var(--rojo)}
+.lugar-body{padding:0 15px 13px;border-top:1px solid var(--borde);display:none}
+.lugar-card.exp .lugar-body{display:block}
+.lugar-det{font-size:var(--fsm);color:var(--txt2);line-height:1.6;padding-top:11px}
+.lugar-stars{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:var(--fss);color:var(--txt3)}
+.lugar-accs{display:flex;gap:7px;margin-top:11px}
+.btn-acc{flex:1;padding:8px;border-radius:7px;border:none;font-size:var(--fss);font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.ba-r{background:var(--verde);color:#fff}
+.ba-l{background:var(--azul-s);color:var(--azul)}
+.ba-c{background:var(--gris);color:var(--txt2)}
+
+/* ── MAPA ── */
+.mapa-wrap{background:#e8f5e9;border-radius:var(--r);overflow:hidden;margin-bottom:12px;border:1.5px solid var(--borde)}
+.mapa-bar{background:#fff;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borde)}
+.mapa-bar span{font-size:var(--fss);color:var(--txt2);display:flex;align-items:center;gap:5px}
+.mapa-bar strong{font-size:var(--fss);color:var(--verde)}
+.mapa-svg{width:100%;height:215px}
+
+/* ── RUTA ── */
+.ruta-inputs{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:15px;margin-bottom:12px}
+.ruta-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--gris);border-radius:8px;margin-bottom:9px}
+.punto{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ruta-row input{background:transparent;border:none;outline:none;font-size:var(--fsm);flex:1;font-family:'Inter',sans-serif;color:var(--txt)}
+.btn-calc-ruta{width:100%;padding:12px;background:var(--verde);color:#fff;border:none;border-radius:var(--r2);font-size:var(--fsm);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.resultado-ruta{display:none}
+.res-ok{background:var(--verde-s);border-radius:var(--r);padding:13px 15px;margin-bottom:12px;display:flex;gap:11px;align-items:center}
+.paso-lista{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:13px 15px;margin-bottom:12px}
+.paso{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--borde)}
+.paso:last-child{border-bottom:none}
+.paso-n{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:var(--verde);color:#fff;font-size:var(--fss);font-weight:600;display:flex;align-items:center;justify-content:center}
+.paso-t strong{font-size:var(--fsm);font-weight:600;display:block;margin-bottom:2px}
+.paso-t span{font-size:var(--fss);color:var(--txt2)}
+
+/* ── VECINOS ── */
+.vecinos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vec-card{background:#fff;border-radius:var(--r);border:1.5px solid var(--borde);padding:13px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;cursor:pointer;transition:all .15s}
+.vec-card:hover{border-color:var(--rosa);transform:translateY(-2px)}
+.vec-av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.vec-nom{font-size:var(--fsm);font-weight:600}
+.vec-dir{font-size:var(--fss);color:var(--txt3)}
+.vec-skill{font-size:var(--fss);color:var(--rosa);font-weight:500}
+.btn-vec-ll{width:100%;padding:7px;background:var(--rosa-s);color:var(--rosa);border:none;border-radius:7px;font-size:var(--fss);font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);align-items:flex-end;justify-content:center}
+.modal-ov.on{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:22px 18px 30px;width:100%;max-width:430px;animation:slideUp .28s ease}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal h3{font-size:var(--fs);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sos-btns{display:flex;flex-direction:column;gap:9px}
+.sos-btn{padding:15px;border-radius:11px;border:none;font-size:var(--fsm);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:11px;text-align:left;width:100%}
+.sos-btn i{font-size:22px}
+.sos-sub{font-size:var(--fss);font-weight:400;opacity:.8;display:block}
+.btn-cancel{margin-top:7px;padding:11px;background:var(--gris);color:var(--txt2);border:none;border-radius:9px;font-size:var(--fsm);font-weight:500;cursor:pointer;width:100%}
+
+/* ── NAV ── */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1.5px solid var(--borde);display:flex;z-index:200}
+.nav-i{flex:1;padding:9px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:transparent;font-size:10px;font-weight:500;color:var(--txt3);transition:color .2s;font-family:'Inter',sans-serif}
+.nav-i i{font-size:21px}
+.nav-i.on{color:var(--verde)}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:#1a1a2e;color:#fff;padding:10px 20px;border-radius:20px;font-size:var(--fsm);font-weight:500;z-index:999;opacity:0;transition:all .35s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header class="hd">
+  <div class="hd-top">
+    <div class="logo">
+      <div class="logo-i">🛤️</div>
+      <span class="logo-t">TrayecTO Seguro</span>
+    </div>
+    <div class="hd-btns">
+      <button class="btn-grande-on" id="btn-grande-toggle" onclick="toggleGrande()" title="Letra grande">
+        <i class="ti ti-text-size"></i>
+      </button>
+      <button class="btn-sos" onclick="abrirModal('modalSOS')">
+        <i class="ti ti-urgent"></i> SOS
+      </button>
+    </div>
+  </div>
+  <div class="busca">
+    <i class="ti ti-search" style="font-size:15px;opacity:.7"></i>
+    <input type="text" placeholder="Buscar lugar en el barrio..." oninput="filtrarBusqueda(this.value)" id="buscaInput">
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs">
+  <div class="tab on"  onclick="irTab('inicio',this)"><i class="ti ti-home"></i> Inicio</div>
+  <div class="tab"     onclick="irTab('mapa',this)"><i class="ti ti-map-2"></i> Mapa</div>
+  <div class="tab"     onclick="irTab('ruta',this)"><i class="ti ti-route"></i> Mi Ruta</div>
+  <div class="tab"     onclick="irTab('salud',this)"><i class="ti ti-heart-rate-monitor"></i> Salud</div>
+  <div class="tab"     onclick="irTab('vecinos',this)"><i class="ti ti-users"></i> Vecinos</div>
+  <div class="tab"     onclick="irTab('perfil',this)"><i class="ti ti-user-circle"></i> Perfil</div>
+</nav>
+
+<!-- ═══ INICIO ═══ -->
+<div id="sec-inicio" class="sec on">
+  <div class="inicio-perfil-strip">
+    <div class="strip-izq">
+      <div class="strip-av" id="strip-av">MG</div>
+      <div>
+        <div class="strip-nombre" id="strip-nombre">María González</div>
+        <div class="strip-sub" id="strip-sub">68 años · Barrio Las Araucarias</div>
+      </div>
+    </div>
+    <div class="strip-der">
+      <button class="btn-mini btn-mini-v" onclick="enviarEstoyBien()">❤️ Estoy bien</button>
+      <button class="btn-mini btn-mini-r" onclick="abrirModal('modalSOS')">🆘</button>
+    </div>
+  </div>
+
+  <div class="banner">
+    <div class="banner-ico">🗺️</div>
+    <div>
+      <h2>Planifica tu caminata</h2>
+      <p>Rutas seguras con paradas de descanso cerca de ti</p>
+      <button class="btn-calc" onclick="irTab('ruta', document.querySelectorAll('.tab')[2])">
+        <i class="ti ti-navigation"></i> Calcular ruta
+      </button>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <div class="filtro fd on" onclick="toggleFiltro(this,'descanso')">🌳 Descanso</div>
+    <div class="filtro fb on" onclick="toggleFiltro(this,'banca')">🪑 Bancas</div>
+    <div class="filtro fc on" onclick="toggleFiltro(this,'centro')">🏛️ Comunitario</div>
+    <div class="filtro ff on" onclick="toggleFiltro(this,'farmacia')">💊 Farmacia</div>
+    <div class="filtro fp on" onclick="toggleFiltro(this,'parroquia')">⛪ Parroquia</div>
+    <div class="filtro fv on" onclick="toggleFiltro(this,'vecino')">🤝 Vecinos</div>
+  </div>
+
+  <div class="sec-tit">Lugares cercanos <span class="badge-c" id="cnt-badge">9</span></div>
+  <div id="lista-lugares"></div>
+</div>
+
+<!-- ═══ MAPA ═══ -->
+<div id="sec-mapa" class="sec">
+  <div class="mapa-wrap">
+    <div class="mapa-bar">
+      <span><i class="ti ti-map-pin" style="color:var(--verde)"></i> Barrio Las Araucarias</span>
+      <strong>12 puntos activos</strong>
+    </div>
+    <svg class="mapa-svg" viewBox="0 0 380 215" xmlns="http://www.w3.org/2000/svg">
+      <rect width="380" height="215" fill="#f1f5ef"/>
+      <rect x="0" y="98" width="380" height="8" fill="#d4e6c8" opacity=".8"/>
+      <rect x="183" y="0" width="8" height="215" fill="#d4e6c8" opacity=".8"/>
+      <rect x="0" y="158" width="380" height="6" fill="#d4e6c8" opacity=".6"/>
+      <rect x="78" y="0" width="6" height="215" fill="#d4e6c8" opacity=".6"/>
+      <rect x="288" y="0" width="6" height="215" fill="#d4e6c8" opacity=".6"/>
+      <rect x="12" y="12" width="60" height="80" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="90" y="12" width="87" height="80" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="195" y="12" width="87" height="80" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="294" y="12" width="74" height="80" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="12" y="114" width="60" height="89" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="90" y="114" width="87" height="38" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="90" y="168" width="87" height="35" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="195" y="114" width="87" height="89" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <rect x="294" y="114" width="74" height="89" rx="4" fill="#e8f0e4" stroke="#c5d9bc" stroke-width=".8"/>
+      <polyline points="187,197 187,134 187,106 187,56 133,56 90,56" fill="none" stroke="#52b788" stroke-width="3" stroke-dasharray="6,4" opacity=".9"/>
+      <g transform="translate(123,50)"><circle r="10" fill="#2d6a4f" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">🌳</text></g>
+      <g transform="translate(238,50)"><circle r="10" fill="#1d6fa4" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">🪑</text></g>
+      <g transform="translate(44,138)"><circle r="10" fill="#c1121f" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">💊</text></g>
+      <g transform="translate(308,50)"><circle r="10" fill="#6d4c9e" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">⛪</text></g>
+      <g transform="translate(238,157)"><circle r="10" fill="#e07b2a" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">🏛️</text></g>
+      <g transform="translate(308,157)"><circle r="10" fill="#b5446e" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" fill="#fff" font-size="10">🤝</text></g>
+      <g transform="translate(187,197)"><circle r="12" fill="#e63946" stroke="#fff" stroke-width="2.5"/><text x="0" y="5" text-anchor="middle" fill="#fff" font-size="12">📍</text></g>
+      <text x="188" y="95" text-anchor="middle" fill="#8aaa80" font-size="8.5">Av. O'Higgins</text>
+    </svg>
+  </div>
+  <div class="card card-p">
+    <p style="font-size:var(--fss);font-weight:600;margin-bottom:9px;color:var(--txt2)">LEYENDA</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">🌳 Lugar de descanso</div>
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">🪑 Banca pública</div>
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">🏛️ Centro comunitario</div>
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">💊 Farmacia</div>
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">⛪ Parroquia</div>
+      <div style="font-size:var(--fss);display:flex;align-items:center;gap:6px">🤝 Vecino de apoyo</div>
+    </div>
+    <div style="margin-top:9px;display:flex;align-items:center;gap:8px;font-size:var(--fss)">
+      <svg width="28" height="8"><line x1="0" y1="4" x2="28" y2="4" stroke="#52b788" stroke-width="2.5" stroke-dasharray="5,3"/></svg>
+      <span style="color:var(--verde)">Ruta segura sugerida</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RUTA ═══ -->
+<div id="sec-ruta" class="sec">
+  <div class="ruta-inputs">
+    <p style="font-size:var(--fss);font-weight:600;margin-bottom:11px;color:var(--txt2)">¿A dónde vas hoy?</p>
+    <div class="ruta-row"><div class="punto" style="background:#e63946"></div><span style="font-size:var(--fsm);color:var(--txt2)">Tu ubicación actual</span></div>
+    <div class="ruta-row"><div class="punto" style="background:var(--verde)"></div><input type="text" placeholder="Destino en el barrio..." id="destino-input"></div>
+    <button class="btn-calc-ruta" onclick="calcularRuta()"><i class="ti ti-route"></i> Calcular ruta segura</button>
+  </div>
+
+  <div class="resultado-ruta" id="resultado-ruta">
+    <div class="res-ok">
+      <span style="font-size:26px">✅</span>
+      <div>
+        <p style="font-size:var(--fsm);font-weight:600;color:var(--verde)">Ruta calculada</p>
+        <p style="font-size:var(--fss);color:var(--txt2)">3 paradas de apoyo · 12 min · 850 m</p>
+      </div>
+    </div>
+    <div class="sec-tit">Pasos de tu ruta</div>
+    <div class="paso-lista">
+      <div class="paso"><div class="paso-n">1</div><div class="paso-t"><strong>Sal por Av. O'Higgins hacia el norte</strong><span>200 metros · acera amplia e iluminada</span></div></div>
+      <div class="paso"><div class="paso-n">2</div><div class="paso-t"><strong>🪑 Banca Plaza Central</strong><span>Parada de descanso · sombra de árboles</span></div></div>
+      <div class="paso"><div class="paso-n">3</div><div class="paso-t"><strong>Gira a la derecha en Calle Los Robles</strong><span>150 metros · pasa por Farmacia Cruz Verde</span></div></div>
+      <div class="paso"><div class="paso-n">4</div><div class="paso-t"><strong>💊 Farmacia Cruz Verde</strong><span>Apoyo médico · baño accesible disponible</span></div></div>
+      <div class="paso"><div class="paso-n">5</div><div class="paso-t"><strong>🎯 Llegada</strong><span>Centro Comunitario Las Araucarias</span></div></div>
+    </div>
+
+    <!-- Calificar la ruta -->
+    <div class="sec-tit">Calificar esta ruta <span style="font-size:var(--fss);color:var(--txt3);font-weight:400">⭐ ayuda a otros vecinos</span></div>
+    <div class="ruta-cal">
+      <div class="ruta-cal-nombre"><i class="ti ti-map-route" style="color:var(--verde)"></i> Ruta: Mi ubicación → Centro Comunitario</div>
+      <div class="cal-fila">
+        <span class="cal-label"><i class="ti ti-bulb" style="color:#f0c040"></i> Iluminación</span>
+        <div class="estrellas" id="cal-ilum" data-val="0">
+          <span class="estrella" onclick="calificar('cal-ilum',1)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-ilum',2)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-ilum',3)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-ilum',4)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-ilum',5)">⭐</span>
+        </div>
+      </div>
+      <div class="cal-fila">
+        <span class="cal-label"><i class="ti ti-wheelchair" style="color:var(--azul)"></i> Accesibilidad</span>
+        <div class="estrellas" id="cal-acc" data-val="0">
+          <span class="estrella" onclick="calificar('cal-acc',1)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-acc',2)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-acc',3)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-acc',4)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-acc',5)">⭐</span>
+        </div>
+      </div>
+      <div class="cal-fila">
+        <span class="cal-label"><i class="ti ti-shield-check" style="color:var(--verde)"></i> Seguridad</span>
+        <div class="estrellas" id="cal-seg" data-val="0">
+          <span class="estrella" onclick="calificar('cal-seg',1)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-seg',2)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-seg',3)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-seg',4)">⭐</span>
+          <span class="estrella" onclick="calificar('cal-seg',5)">⭐</span>
+        </div>
+      </div>
+      <button class="btn-enviar-cal" onclick="enviarCalificacion()"><i class="ti ti-send"></i> Enviar calificación</button>
+      <div class="cal-promedio">Promedio de la comunidad: ⭐⭐⭐⭐ (4.2 / 5 — 18 reseñas)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SALUD ═══ -->
+<div id="sec-salud" class="sec">
+
+  <!-- ESTOY BIEN -->
+  <div class="sec-tit">❤️ Avisar que estoy bien</div>
+  <button class="estoy-bien-btn" id="eb-btn" onclick="enviarEstoyBienFull()">
+    <div class="eb-ico">❤️</div>
+    <div class="eb-txt">Estoy Bien</div>
+    <div class="eb-sub" id="eb-sub">Envía un mensaje a Ana González (hija)</div>
+  </button>
+
+  <!-- RECORDATORIOS -->
+  <div class="sec-tit">Recordatorios del día</div>
+  <div class="rec-grid">
+    <div class="rec-card activo" id="rec-med">
+      <div class="rec-ico">💊</div>
+      <div class="rec-nombre">Medicamentos</div>
+      <div class="rec-hora">8:00 · 14:00 · 20:00</div>
+    </div>
+    <div class="rec-card activo" id="rec-agua">
+      <div class="rec-ico">💧</div>
+      <div class="rec-nombre">Hidratación</div>
+      <div class="rec-hora">Cada 2 horas</div>
+    </div>
+  </div>
+  <div class="card card-p" style="margin-bottom:12px">
+    <div class="rec-toggle" style="margin-bottom:12px">
+      <span style="font-size:var(--fsm);display:flex;align-items:center;gap:8px">💊 Recordatorio de medicamentos</span>
+      <div class="toggle on" id="t-med" onclick="toggleRec('t-med','rec-med')"></div>
+    </div>
+    <div class="rec-toggle" style="margin-bottom:12px">
+      <span style="font-size:var(--fsm);display:flex;align-items:center;gap:8px">💧 Recordatorio de agua</span>
+      <div class="toggle on" id="t-agua" onclick="toggleRec('t-agua','rec-agua')"></div>
+    </div>
+    <div class="rec-toggle">
+      <span style="font-size:var(--fsm);display:flex;align-items:center;gap:8px">🔔 Alertas de puntos seguros</span>
+      <div class="toggle on" id="t-pts" onclick="toggleRec('t-pts',null)"></div>
+    </div>
+  </div>
+
+  <!-- CAMINATAS -->
+  <div class="sec-tit">🚶 Caminatas de hoy</div>
+  <div class="card">
+    <div class="pasos-hero">
+      <div class="pasos-num" id="pasos-num">3.240</div>
+      <div class="pasos-label">pasos hoy</div>
+      <div class="barra-progreso" style="margin:12px 16px 0">
+        <div class="barra-fill" id="pasos-barra" style="width:32%"></div>
+      </div>
+      <div style="font-size:var(--fss);color:var(--txt3);margin-top:5px">Meta: 10.000 pasos · 32% completado</div>
+    </div>
+    <div class="stats-row" style="padding:0 12px 14px">
+      <div class="stat-mini"><div class="stat-mini-val">2.1</div><div class="stat-mini-lab">km recorridos</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">28</div><div class="stat-mini-lab">min activos</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">142</div><div class="stat-mini-lab">calorías est.</div></div>
+    </div>
+    <div style="padding:0 12px 14px;display:flex;gap:8px">
+      <button onclick="sumarPasos()" style="flex:1;padding:10px;background:var(--verde);color:#fff;border:none;border-radius:var(--r2);font-size:var(--fsm);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+        <i class="ti ti-plus"></i> Registrar caminata
+      </button>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="sec-tit" style="margin-top:14px">Historial de esta semana</div>
+  <div class="historial-lista">
+    <div class="hist-item"><div><div class="hist-fecha">Hoy, martes</div><div class="hist-det">1 caminata · 28 min</div></div><div class="hist-pasos">3.240 pasos</div></div>
+    <div class="hist-item"><div><div class="hist-fecha">Lunes</div><div class="hist-det">2 caminatas · 45 min</div></div><div class="hist-pasos">6.810 pasos</div></div>
+    <div class="hist-item"><div><div class="hist-fecha">Domingo</div><div class="hist-det">1 caminata · 20 min</div></div><div class="hist-pasos">2.950 pasos</div></div>
+    <div class="hist-item"><div><div class="hist-fecha">Sábado</div><div class="hist-det">3 caminatas · 62 min</div></div><div class="hist-pasos">9.100 pasos</div></div>
+  </div>
+
+  <!-- ALERTAS PUNTOS -->
+  <div class="sec-tit" style="margin-top:14px">🔔 Alertas de puntos seguros</div>
+  <div class="alerta-seg">
+    <i class="ti ti-info-circle"></i>
+    <div class="alerta-seg-txt"><strong>Alertas de proximidad activas</strong>La app te avisa cuando estés a menos de 100 m de un punto seguro.</div>
+  </div>
+  <div class="alertas-lista">
+    <div class="alerta-item">
+      <div class="alerta-punto-ico ci-f">💊</div>
+      <div class="alerta-info"><div class="alerta-nombre">Farmacia Cruz Verde</div><div class="alerta-radio">Alerta a 100 m · última vez hace 2h</div></div>
+      <span class="badge-on">Activa</span>
+    </div>
+    <div class="alerta-item">
+      <div class="alerta-punto-ico ci-d">🌳</div>
+      <div class="alerta-info"><div class="alerta-nombre">Parque Araucarias</div><div class="alerta-radio">Alerta a 150 m</div></div>
+      <span class="badge-on">Activa</span>
+    </div>
+    <div class="alerta-item">
+      <div class="alerta-punto-ico ci-c">🏛️</div>
+      <div class="alerta-info"><div class="alerta-nombre">Centro Comunitario</div><div class="alerta-radio">Alerta a 100 m</div></div>
+      <span class="badge-off">Inactiva</span>
+    </div>
+  </div>
+
+  <!-- COMANDOS DE VOZ -->
+  <div class="sec-tit" style="margin-top:14px">🎤 Comandos de voz</div>
+  <button class="voz-btn" id="voz-btn" onclick="toggleVoz()">
+    <div class="voz-ico">🎤</div>
+    <div class="voz-txt" id="voz-txt">Toca para hablar</div>
+  </button>
+  <div class="voz-cmds">
+    <div class="voz-cmd"><i class="ti ti-microphone"></i> "Llévame a la farmacia más cercana"</div>
+    <div class="voz-cmd"><i class="ti ti-microphone"></i> "Avisar que estoy bien"</div>
+    <div class="voz-cmd"><i class="ti ti-microphone"></i> "¿Dónde hay una banca cerca?"</div>
+    <div class="voz-cmd"><i class="ti ti-microphone"></i> "Llamar a SAMU"</div>
+    <div class="voz-cmd"><i class="ti ti-microphone"></i> "Mostrar mi ruta"</div>
+  </div>
+</div>
+
+<!-- ═══ VECINOS ═══ -->
+<div id="sec-vecinos" class="sec">
+  <div class="alerta-seg">
+    <i class="ti ti-heart"></i>
+    <div class="alerta-seg-txt"><strong>Red vecinal solidaria</strong>Personas del barrio que ofrecen apoyo voluntario.</div>
+  </div>
+  <div class="sec-tit">Vecinos de apoyo <span class="badge-c">6</span></div>
+  <div class="vecinos-grid" id="grid-vecinos"></div>
+</div>
+
+<!-- ═══ PERFIL ═══ -->
+<div id="sec-perfil" class="sec">
+  <div class="card card-p">
+    <div class="perfil-hero">
+      <div class="avatar-big" id="perfil-av">MG<div class="avatar-edit" onclick="toast('Editar foto')"><i class="ti ti-camera" style="font-size:11px"></i></div></div>
+      <div>
+        <div class="perfil-nombre" id="perfil-nombre-disp">María González</div>
+        <div class="perfil-edad" id="perfil-edad-disp">68 años · Talca, Maule</div>
+      </div>
+    </div>
+
+    <div class="campo-grupo">
+      <label class="campo-label">Nombre completo</label>
+      <input class="campo-input" type="text" id="p-nombre" value="María González" oninput="previewPerfil()">
+    </div>
+    <div class="campo-grupo">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="campo-label">Edad</label>
+          <input class="campo-input" type="number" id="p-edad" value="68" min="1" max="120">
+        </div>
+        <div>
+          <label class="campo-label">Teléfono</label>
+          <input class="campo-input" type="tel" id="p-tel" value="+56 9 1234 5678">
+        </div>
+      </div>
+    </div>
+    <div class="campo-grupo">
+      <label class="campo-label">Dirección en el barrio</label>
+      <input class="campo-input" type="text" id="p-dir" value="Av. O'Higgins 445, Las Araucarias">
+    </div>
+
+    <div style="height:1px;background:var(--borde);margin:14px 0"></div>
+    <p style="font-size:var(--fsm);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:7px"><i class="ti ti-heart-handshake" style="color:var(--rojo)"></i> Contacto de emergencia</p>
+
+    <div class="campo-grupo">
+      <label class="campo-label">Nombre del familiar</label>
+      <input class="campo-input" type="text" id="p-fam-nombre" value="Ana González" oninput="previewPerfil()">
+    </div>
+    <div class="campo-grupo">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="campo-label">Relación</label>
+          <input class="campo-input" type="text" id="p-fam-rel" value="Hija">
+        </div>
+        <div>
+          <label class="campo-label">Teléfono</label>
+          <input class="campo-input" type="tel" id="p-fam-tel" value="+56 9 8765 4321">
+        </div>
+      </div>
+    </div>
+    <div class="campo-grupo">
+      <label class="campo-label">Segundo contacto (opcional)</label>
+      <input class="campo-input" type="text" id="p-fam2" value="Pedro González (Hijo) — +56 9 5555 1234">
+    </div>
+
+    <button class="btn-guardar" onclick="guardarPerfil()"><i class="ti ti-device-floppy"></i> Guardar cambios</button>
+  </div>
+
+  <!-- LLAMADAS RÁPIDAS -->
+  <div class="sec-tit" style="margin-top:4px">📞 Llamada rápida</div>
+  <div class="llamadas-grid">
+    <button class="llamada-btn ll-fam" onclick="llamar(document.getElementById('p-fam-tel').value, document.getElementById('p-fam-nombre').value)">
+      <i class="ti ti-heart"></i>
+      <div class="llamada-num" id="ll-fam-nom">Ana González</div>
+      <div class="llamada-desc">Familiar de emergencia</div>
+    </button>
+    <button class="llamada-btn ll-samu" onclick="llamar('131','SAMU')">
+      <i class="ti ti-ambulance"></i>
+      <div class="llamada-num">131</div>
+      <div class="llamada-desc">SAMU — Urgencias</div>
+    </button>
+    <button class="llamada-btn ll-bom" onclick="llamar('132','Bomberos')">
+      <i class="ti ti-firetruck"></i>
+      <div class="llamada-num">132</div>
+      <div class="llamada-desc">Bomberos</div>
+    </button>
+    <button class="llamada-btn ll-car" onclick="llamar('133','Carabineros')">
+      <i class="ti ti-shield-star"></i>
+      <div class="llamada-num">133</div>
+      <div class="llamada-desc">Carabineros</div>
+    </button>
+  </div>
+
+  <!-- MODO LETRA GRANDE -->
+  <div class="card card-p" style="margin-top:4px">
+    <div class="rec-toggle">
+      <span style="font-size:var(--fsm);display:flex;align-items:center;gap:8px"><i class="ti ti-text-size" style="font-size:18px;color:var(--verde)"></i> Letra grande</span>
+      <div class="toggle" id="t-grande" onclick="toggleGrande()"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LLAMADAS RÁPIDAS TAMBIÉN EN INICIO ═══ -->
+
+<!-- ═══ MODAL SOS ═══ -->
+<div class="modal-ov" id="modalSOS" onclick="if(event.target===this)cerrarModal('modalSOS')">
+  <div class="modal">
+    <h3 style="color:var(--rojo)"><i class="ti ti-urgent"></i> Ayuda de emergencia</h3>
+    <div class="sos-btns">
+      <button class="sos-btn" style="background:#ffebee;color:var(--rojo)" onclick="llamar('133','Carabineros')">
+        <i class="ti ti-shield-star" style="color:var(--rojo)"></i>
+        <div>Carabineros <span class="sos-sub">Llamar al 133</span></div>
+      </button>
+      <button class="sos-btn" style="background:#fff3e0;color:#b84c00" onclick="llamar('131','SAMU')">
+        <i class="ti ti-ambulance" style="color:#f4a261"></i>
+        <div>SAMU — Urgencias <span class="sos-sub">Llamar al 131</span></div>
+      </button>
+      <button class="sos-btn" style="background:#fff3e0;color:#c0392b" onclick="llamar('132','Bomberos')">
+        <i class="ti ti-firetruck" style="color:#e74c3c"></i>
+        <div>Bomberos <span class="sos-sub">Llamar al 132</span></div>
+      </button>
+      <button class="sos-btn" style="background:var(--verde-s);color:var(--verde)" onclick="alertarVecinos()">
+        <i class="ti ti-speakerphone" style="color:var(--verde)"></i>
+        <div>Alertar vecinos cercanos <span class="sos-sub">Envía aviso a la red de apoyo</span></div>
+      </button>
+      <button class="sos-btn" style="background:var(--rosa-s);color:var(--rosa)" onclick="llamar(document.getElementById('p-fam-tel').value, document.getElementById('p-fam-nombre').value)">
+        <i class="ti ti-heart" style="color:var(--rosa)"></i>
+        <div id="sos-fam-label">Llamar a Ana González (Hija) <span class="sos-sub">Contacto de emergencia</span></div>
+      </button>
+    </div>
+    <button class="btn-cancel" onclick="cerrarModal('modalSOS')">Cancelar</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-i on" onclick="irTab('inicio',null,this)"><i class="ti ti-home"></i>Inicio</button>
+  <button class="nav-i" onclick="irTab('mapa',null,this)"><i class="ti ti-map-2"></i>Mapa</button>
+  <button class="nav-i" onclick="irTab('ruta',null,this)"><i class="ti ti-route"></i>Ruta</button>
+  <button class="nav-i" onclick="irTab('salud',null,this)"><i class="ti ti-heart-rate-monitor"></i>Salud</button>
+  <button class="nav-i" onclick="irTab('vecinos',null,this)"><i class="ti ti-users"></i>Vecinos</button>
+  <button class="nav-i" onclick="irTab('perfil',null,this)"><i class="ti ti-user-circle"></i>Perfil</button>
+</nav>
+
+<script>
+// ── DATOS ──
+const lugares = [
+  {id:1,nombre:'Parque Araucarias',dir:"Av. O'Higgins 320",cat:'descanso',ico:'🌳',ci:'ci-d',dist:'180m',ab:true,det:'Área verde con sombra, bancas y agua potable. Acceso para sillas de ruedas.',tel:null,estrellas:4.5,resenas:12},
+  {id:2,nombre:'Plaza Los Notros',dir:'Calle Los Robles esq. 5',cat:'banca',ico:'🪑',ci:'ci-b',dist:'250m',ab:true,det:'5 bancas bajo árboles, iluminación nocturna. Punto de reunión vecinal.',tel:null,estrellas:4.0,resenas:7},
+  {id:3,nombre:"Banca Av. Principal",dir:"Av. O'Higgins frente 450",cat:'banca',ico:'🪑',ci:'ci-b',dist:'90m',ab:true,det:'Banca con techo para lluvia. Cerca de paradero de buses.',tel:null,estrellas:3.8,resenas:5},
+  {id:4,nombre:'Centro Comunitario Las Araucarias',dir:'Pasaje Ñocha 12',cat:'centro',ico:'🏛️',ci:'ci-c',dist:'400m',ab:true,det:'L-V 9-17h. Baño accesible, agua, sillas. Talleres para adultos mayores.',tel:'+56 71 234567',estrellas:4.8,resenas:22},
+  {id:5,nombre:'Farmacia Cruz Verde',dir:"Av. O'Higgins 502",cat:'farmacia',ico:'💊',ci:'ci-f',dist:'310m',ab:true,det:'8-22h todos los días. Baño de uso público disponible. Silla de espera.',tel:'+56 71 456789',estrellas:4.2,resenas:18},
+  {id:6,nombre:'Farmacia Ahumada',dir:'Calle Los Robles 190',cat:'farmacia',ico:'💊',ci:'ci-f',dist:'450m',ab:true,det:'Abierta 24 horas. Servicio de delivery. Toma de presión gratuita.',tel:'+56 71 567890',estrellas:4.0,resenas:9},
+  {id:7,nombre:'Parroquia San Francisco',dir:'Calle Las Lilas 44',cat:'parroquia',ico:'⛪',ci:'ci-p',dist:'600m',ab:true,det:'Abierta 8-20h. Sillas disponibles para descanso. Grupos de ayuda comunitaria.',tel:'+56 71 678901',estrellas:4.7,resenas:14},
+  {id:8,nombre:'Casa Vecinal Población Nueva',dir:'Calle Los Maquis 88',cat:'centro',ico:'🏛️',ci:'ci-c',dist:'520m',ab:false,det:'Abre mar, jue y sáb 10-14h. Punto de encuentro con enfermería básica.',tel:'+56 71 345678',estrellas:4.1,resenas:6},
+  {id:9,nombre:'Vecino de apoyo: María López',dir:'Calle Los Robles 234',cat:'vecino',ico:'🤝',ci:'ci-v',dist:'130m',ab:true,det:'Disponible de 9 a 18h. Primeros auxilios y compañía.',tel:'+56 9 123456',estrellas:5.0,resenas:3},
+];
+
+const vecinos = [
+  {n:'María López',ini:'ML',dir:'Los Robles 234',skill:'Primeros auxilios',c:'var(--rosa-s)',ct:'var(--rosa)',tel:'+56912345678'},
+  {n:'Carlos Rojas',ini:'CR',dir:"Av. O'Higgins 512",skill:'Transporte, apoyo',c:'var(--azul-s)',ct:'var(--azul)',tel:'+56923456789'},
+  {n:'Rosa Muñoz',ini:'RM',dir:'Pasaje Ñocha 8',skill:'Enfermería básica',c:'var(--verde-s)',ct:'var(--verde)',tel:'+56934567890'},
+  {n:'Juan Soto',ini:'JS',dir:'Calle Las Lilas 22',skill:'Mecánica, silla ruedas',c:'var(--cafe-s)',ct:'var(--cafe)',tel:'+56945678901'},
+  {n:'Luisa Vera',ini:'LV',dir:'Los Robles 67',skill:'Compañía, recados',c:'var(--morado-s)',ct:'var(--morado)',tel:'+56956789012'},
+  {n:'Pedro Arce',ini:'PA',dir:"Av. O'Higgins 480",skill:'Transporte urgente',c:'var(--amarillo-s)',ct:'var(--amarillo)',tel:'+56967890123'},
+];
+
+let filtrosOn = new Set(['descanso','banca','centro','farmacia','parroquia','vecino']);
+let pasos = 3240;
+let modoGrande = false;
+let vozActiva = false;
+
+// ── RENDER ──
+function renderLugares(lista){
+  const fil = lista.filter(l=>filtrosOn.has(l.cat));
+  document.getElementById('cnt-badge').textContent = fil.length;
+  document.getElementById('lista-lugares').innerHTML = fil.map(l=>`
+    <div class="lugar-card" id="lc-${l.id}" onclick="toggleLugar(${l.id})">
+      <div class="lugar-hd">
+        <div class="cat-ico ${l.ci}">${l.ico}</div>
+        <div class="lugar-info">
+          <div class="lugar-nombre">${l.nombre}</div>
+          <div class="lugar-dir"><i class="ti ti-map-pin" style="font-size:11px"></i>${l.dir}</div>
+          <div class="lugar-meta">
+            <span class="dist-b"><i class="ti ti-walk" style="font-size:11px"></i>${l.dist}</span>
+            <span class="dist-b ${l.ab?'ab':'ce'}">${l.ab?'Abierto':'Cerrado'}</span>
+          </div>
+        </div>
+        <i class="ti ti-chevron-down" style="font-size:15px;color:var(--txt3)"></i>
+      </div>
+      <div class="lugar-body">
+        <p class="lugar-det">${l.det}</p>
+        <div class="lugar-stars">⭐ ${l.estrellas} (${l.resenas} reseñas)</div>
+        <div class="lugar-accs">
+          <button class="btn-acc ba-r" onclick="event.stopPropagation();irTab('mapa',document.querySelectorAll('.tab')[1])"><i class="ti ti-route"></i> Ver ruta</button>
+          ${l.tel?`<button class="btn-acc ba-l" onclick="event.stopPropagation();llamar('${l.tel}','${l.nombre}')"><i class="ti ti-phone"></i> Llamar</button>`:''}
+          <button class="btn-acc ba-c" onclick="event.stopPropagation();toast('Ubicación compartida ✓')"><i class="ti ti-share"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderVecinos(){
+  document.getElementById('grid-vecinos').innerHTML = vecinos.map(v=>`
+    <div class="vec-card">
+      <div class="vec-av" style="background:${v.c};color:${v.ct}">${v.ini}</div>
+      <div class="vec-nom">${v.n}</div>
+      <div class="vec-dir">${v.dir}</div>
+      <div class="vec-skill">${v.skill}</div>
+      <button class="btn-vec-ll" onclick="llamar('${v.tel}','${v.n}')"><i class="ti ti-phone"></i> Llamar</button>
+    </div>`).join('');
+}
+
+// ── NAVEGACIÓN ──
+function irTab(id, tabEl, navEl){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nav-i').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  if(tabEl) tabEl.classList.add('on');
+  if(navEl) navEl.classList.add('on');
+  const tabIdx = {inicio:0,mapa:1,ruta:2,salud:3,vecinos:4,perfil:5};
+  if(!tabEl) document.querySelectorAll('.tab')[tabIdx[id]]?.classList.add('on');
+  if(!navEl) document.querySelectorAll('.nav-i')[tabIdx[id]]?.classList.add('on');
+}
+
+function toggleLugar(id){document.getElementById('lc-'+id).classList.toggle('exp')}
+
+function toggleFiltro(el, cat){
+  el.classList.toggle('on');
+  filtrosOn.has(cat)?filtrosOn.delete(cat):filtrosOn.add(cat);
+  renderLugares(lugares);
+}
+
+function filtrarBusqueda(q){
+  if(!q){renderLugares(lugares);return}
+  q=q.toLowerCase();
+  renderLugares(lugares.filter(l=>l.nombre.toLowerCase().includes(q)||l.dir.toLowerCase().includes(q)));
+}
+
+// ── ESTOY BIEN ──
+function enviarEstoyBien(){
+  const nombre = document.getElementById('p-fam-nombre')?.value || 'Ana González';
+  toast(`❤️ Mensaje enviado a ${nombre}`);
+}
+function enviarEstoyBienFull(){
+  const btn = document.getElementById('eb-btn');
+  const nombre = document.getElementById('p-fam-nombre')?.value || 'Ana González';
+  btn.classList.add('enviado');
+  document.getElementById('eb-sub').textContent = '✓ Mensaje enviado correctamente';
+  toast(`❤️ "${nombre" te sabe que estás bien`);
+  setTimeout(()=>{
+    btn.classList.remove('enviado');
+    document.getElementById('eb-sub').textContent = `Envía un mensaje a ${nombre} (familiar)`;
+  },4000);
+}
+
+// ── RECORDATORIOS ──
+function toggleRec(tid, cid){
+  const t=document.getElementById(tid);
+  t.classList.toggle('on');
+  if(cid){const c=document.getElementById(cid);if(c)c.classList.toggle('activo')}
+  toast(t.classList.contains('on')?'Recordatorio activado ✓':'Recordatorio desactivado');
+}
+
+// ── PASOS ──
+function sumarPasos(){
+  pasos += Math.floor(Math.random()*800+400);
+  document.getElementById('pasos-num').textContent = pasos.toLocaleString('es-CL');
+  const pct = Math.min(100,Math.round(pasos/10000*100));
+  document.getElementById('pasos-barra').style.width = pct+'%';
+  toast(`🚶 Caminata registrada — ${pasos.toLocaleString('es-CL')} pasos totales`);
+}
+
+// ── CALIFICAR RUTA ──
+function calificar(grupoId, val){
+  const g=document.getElementById(grupoId);
+  g.dataset.val=val;
+  g.querySelectorAll('.estrella').forEach((e,i)=>e.classList.toggle('on',i<val));
+}
+function enviarCalificacion(){
+  const il=document.getElementById('cal-ilum').dataset.val;
+  const ac=document.getElementById('cal-acc').dataset.val;
+  const se=document.getElementById('cal-seg').dataset.val;
+  if(il==0||ac==0||se==0){toast('Califica los 3 criterios primero');return}
+  toast('⭐ ¡Gracias! Tu calificación fue enviada a la comunidad');
+}
+
+// ── VOZ ──
+function toggleVoz(){
+  vozActiva=!vozActiva;
+  const btn=document.getElementById('voz-btn');
+  const txt=document.getElementById('voz-txt');
+  btn.classList.toggle('escuchando',vozActiva);
+  txt.textContent=vozActiva?'Escuchando... habla ahora':'Toca para hablar';
+  if(vozActiva){
+    if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+      const r=new SR();r.lang='es-CL';r.continuous=false;r.interimResults=false;
+      r.onresult=e=>{
+        const cmd=e.results[0][0].transcript.toLowerCase();
+        toast('🎤 Escuché: "'+e.results[0][0].transcript+'"');
+        procesarVoz(cmd);
+        vozActiva=false;btn.classList.remove('escuchando');txt.textContent='Toca para hablar';
+      };
+      r.onerror=()=>{vozActiva=false;btn.classList.remove('escuchando');txt.textContent='Toca para hablar';toast('No se pudo escuchar, intenta de nuevo');};
+      r.start();
+    } else {
+      setTimeout(()=>{vozActiva=false;btn.classList.remove('escuchando');txt.textContent='Toca para hablar';toast('🎤 Voz no disponible en este navegador');},1500);
+    }
+  }
+}
+function procesarVoz(cmd){
+  if(cmd.includes('farmacia')||cmd.includes('medicamento')){irTab('inicio');toast('Mostrando farmacias cercanas')}
+  else if(cmd.includes('estoy bien')||cmd.includes('avisa')){enviarEstoyBien()}
+  else if(cmd.includes('banca')||cmd.includes('descanso')){irTab('inicio');toast('Mostrando bancas y lugares de descanso')}
+  else if(cmd.includes('samu')||cmd.includes('emergencia')){llamar('131','SAMU')}
+  else if(cmd.includes('ruta')||cmd.includes('camino')){irTab('ruta')}
+  else toast('Comando no reconocido. Intenta de nuevo.');
+}
+
+// ── LETRA GRANDE ──
+function toggleGrande(){
+  modoGrande=!modoGrande;
+  document.body.classList.toggle('grande',modoGrande);
+  const t=document.getElementById('t-grande');
+  if(t) t.classList.toggle('on',modoGrande);
+  const b=document.getElementById('btn-grande-toggle');
+  if(b) b.classList.toggle('on',modoGrande);
+  toast(modoGrande?'Letra grande activada':'Letra normal activada');
+}
+
+// ── PERFIL ──
+function previewPerfil(){
+  const n=document.getElementById('p-nombre').value||'Usuario';
+  const ini=n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+  document.getElementById('perfil-nombre-disp').textContent=n;
+  document.getElementById('perfil-av').childNodes[0].textContent=ini;
+  document.getElementById('strip-av').textContent=ini;
+  document.getElementById('strip-nombre').textContent=n;
+  const famNom=document.getElementById('p-fam-nombre').value||'familiar';
+  document.getElementById('eb-sub').textContent=`Envía un mensaje a ${famNom} (familiar)`;
+  document.getElementById('ll-fam-nom').textContent=famNom;
+  const sosLbl=document.getElementById('sos-fam-label');
+  if(sosLbl)sosLbl.innerHTML=`Llamar a ${famNom} <span class="sos-sub">Contacto de emergencia</span>`;
+}
+function guardarPerfil(){
+  const edad=document.getElementById('p-edad').value;
+  document.getElementById('perfil-edad-disp').textContent=`${edad} años · Talca, Maule`;
+  document.getElementById('strip-sub').textContent=`${edad} años · Barrio Las Araucarias`;
+  toast('✓ Perfil guardado correctamente');
+}
+
+// ── LLAMAR ──
+function llamar(num, nombre){
+  cerrarModal('modalSOS');
+  toast(`📞 Llamando a ${nombre||num}…`);
+  setTimeout(()=>{
+    if(confirm(`📞 Llamar al número:\n${num} — ${nombre||''}\n\n¿Confirmar llamada?`)){
+      window.location.href='tel:'+num.replace(/\s/g,'');
+    }
+  },300);
+}
+
+// ── ALERTAR VECINOS ──
+function alertarVecinos(){
+  cerrarModal('modalSOS');
+  setTimeout(()=>toast('✅ Alerta enviada a 4 vecinos cercanos — María y Carlos ya fueron notificados'),300);
+}
+
+// ── CALCULAR RUTA ──
+function calcularRuta(){
+  const d=document.getElementById('destino-input').value;
+  if(!d){toast('Escribe tu destino primero');return}
+  document.getElementById('resultado-ruta').style.display='block';
+  document.getElementById('resultado-ruta').scrollIntoView({behavior:'smooth'});
+}
+
+// ── MODALES ──
+function abrirModal(id){document.getElementById(id).classList.add('on')}
+function cerrarModal(id){document.getElementById(id).classList.remove('on')}
+
+// ── TOAST ──
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ──
+renderLugares(lugares);
+renderVecinos();
+</script>
+</body>
+</html>
